@@ -1,5 +1,18 @@
-body{
-    background-color: red;
+/*
+    colors:
+    Hintergrundfarbe: #0A192F
+    Akzentfarbe 1: #2196F3
+    Akzentfarbe 2: #00ACC1
+    Schriftfarbe: #FFFFFF
+    Abgrenzungsfarbe: #4CAF50
+*/
+
+html, body{
+    background-color: #0a192f;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
 main {
@@ -7,11 +20,70 @@ main {
     margin: 0 auto;
     height: 100%;
     font-size: 3em;
-    color: #e8e8e8;
+    color: #ffffff;
     font-family: sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     flex-wrap: nowrap;
 }
+
+h1 {
+    margin-top: 40%;
+}
+
+section {
+    height: 67%;
+    width: 100%;
+}
+
+
+.table {
+    height: 50%;
+    width: 100%;
+    background-color: red;
+}
+
+.selection {
+    margin-top: 10%;
+    height: 40%;
+}
+
+button {
+    width: 80%;
+    font-size: 127%;
+    margin: 8% 10%;
+    height: 38%;
+    border-radius: 50px;
+    background-color: #2196f3;
+    box-shadow: 4px 4px 20px 1px white;
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.btn_done {
+    background: darkgreen;
+
+}
+
+.btn_done:active {
+    background-color: #004200FF;
+}
+
+.btn_not_done {
+    background-color: darkred;
+}
+
+.btn_not_done:active {
+    background-color: #420000;
+}
+
+button img {
+    margin-left: 10px;
+    height: 50%;
+}
+

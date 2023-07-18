@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     {% block head %}
         <title>{{ title }}</title>
@@ -19,7 +19,26 @@
         {% endblock %}
 
         {% block content %}
+            <section>
+                {% block table %}
+                    <div class="table">
 
+                    </div>
+                {% endblock %}
+
+                {% block selection %}
+                    <div class="selection">
+                        <button class="btn_done">
+                            <span>Erledigt</span>
+                            <img src="./assets/icons/tick.svg" alt="">
+                        </button>
+                        <button class="btn_not_done">
+                            <span>Nicht erledigt</span>
+                            <img src="./assets/icons/cross.svg" alt="">
+                        </button>
+                    </div>
+                {% endblock %}
+            </section>
         {% endblock %}
     </main>
 {% endblock %}
