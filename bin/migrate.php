@@ -17,13 +17,17 @@
         'driver' => 'pdo_mysql',
     ];
 
-    var_dump($connectionParams);
+//    var_dump($connectionParams);
 
     try
     {
         $conn = DriverManager::getConnection($connectionParams);
+        var_dump($conn);
+
+//        $conn->connect();
     } catch (\Doctrine\DBAL\Exception $e)
     {
+        echo $e->getMessage();
         die('Verbindung zur Datenbank konnte nicht hergestellt werden');
     }
 

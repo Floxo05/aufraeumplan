@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+    declare(strict_types=1);
 
     namespace Florian\Abfallkalender\Models\Migration;
 
@@ -19,10 +20,20 @@
             $this->path = $path;
         }
 
-        public function doMigration() {
+        public function doMigration()
+        {
 
-            var_dump($_SERVER);
+            //Check, ob Migrationsdatenbank vorhanden ist
+            $isMigrationDatabaseAvailable = $this->isMigrationDatabaseAvailable();
+        }
 
+        private function isMigrationDatabaseAvailable(): bool
+        {
+            $sm = $this->conn->createSchemaManager();
+
+            var_dump($sm->listTables());
+
+            return false;
         }
 
 
