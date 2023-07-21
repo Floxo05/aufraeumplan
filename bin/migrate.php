@@ -22,17 +22,19 @@
     try
     {
         $conn = DriverManager::getConnection($connectionParams);
-        var_dump($conn);
 
-//        $conn->connect();
+        $conn->connect();
     } catch (\Doctrine\DBAL\Exception $e)
     {
         echo $e->getMessage();
         die('Verbindung zur Datenbank konnte nicht hergestellt werden');
     }
 
+
     $migration = new Migration($conn, $_ENV['PATH_MIGRATION'] ?? '');
 
     $migration->doMigration();
+
+    $conn->close();
 
 

@@ -4,6 +4,8 @@
     namespace Florian\Abfallkalender\Models\Migration;
 
     use Doctrine\DBAL\Connection;
+    use Doctrine\DBAL\Exception;
+    use Florian\Abfallkalender\Exceptions\MissingEnvironmentInformation;
 
     class Migration
     {
@@ -25,13 +27,30 @@
 
             //Check, ob Migrationsdatenbank vorhanden ist
             $isMigrationDatabaseAvailable = $this->isMigrationDatabaseAvailable();
+            var_dump($isMigrationDatabaseAvailable);
         }
 
+        /**
+         * @throws Exception
+         * @throws MissingEnvironmentInformation
+         */
         private function isMigrationDatabaseAvailable(): bool
         {
             $sm = $this->conn->createSchemaManager();
+            $tables = $sm->listTables();
 
-            var_dump($sm->listTables());
+            if (!isset($_ENV['MIGRATION_TABLE']))
+            {
+                throw new MissingEnvironmentInformation('MIGRATION_TABLE');
+            }
+
+            foreach ($tables as $table)
+            {
+                if ($table->getName() === $_ENV['MIGRATION_TABLE'])
+                {
+                    return true;
+                }
+            }
 
             return false;
         }

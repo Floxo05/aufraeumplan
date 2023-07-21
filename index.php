@@ -1,6 +1,5 @@
 <?php
 
-    use Doctrine\DBAL\DriverManager;
     use Dotenv\Dotenv;
     use Twig\Error\LoaderError;
     use Twig\Error\RuntimeError;
@@ -18,16 +17,13 @@
         'host' => $_ENV['DB_HOST'] ?? '',
         'driver' => 'pdo_mysql',
     ];
+try {
+    $pdo = new PDO('mysql:dbname=aufraeumplan;host=localhost', 'fwolf', 'florian');
+} catch (Exception $e)
+{
+    echo $e->getMessage();
+}
 
-    try
-    {
-        $conn = DriverManager::getConnection($connectionParams);
-
-        $conn->connect();
-    } catch (\Doctrine\DBAL\Exception $e)
-    {
-        die('Verbindung zur Datenbank konnte nicht hergestellt werden');
-    }
 
     $loader = new Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
     $twig = new Twig\Environment($loader);
@@ -39,9 +35,6 @@
     {
         echo $e->getMessage();
         die('Fehler im Rendering der Seite');
-    } finally
-    {
-        $conn->close();
     }
 
 
