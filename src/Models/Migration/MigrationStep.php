@@ -2,17 +2,9 @@
 
     namespace Florian\Abfallkalender\Models\Migration;
 
+    use Doctrine\DBAL\Connection;
+
     abstract class MigrationStep
     {
-        protected string $sql;
-
-        /**
-         * @param string $sql
-         */
-        public function setSql(string $sql): void
-        {
-            $this->sql = $sql;
-        }
-
-        abstract public function up();
+        abstract public function up(Connection $connection);
     }
