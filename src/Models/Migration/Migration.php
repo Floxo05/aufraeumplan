@@ -138,11 +138,11 @@
             if (file_put_contents($filePath, $fileContent) !== false)
             {
                 // Erfolgsmeldung
-                echo "Die Datei wurde erfolgreich erstellt: $filePath";
+                echo "Die Datei wurde erfolgreich erstellt: $filePath" . PHP_EOL;
             } else
             {
                 // Fehlermeldung
-                echo "Fehler beim Erstellen der Datei.";
+                echo "Fehler beim Erstellen der Datei." . PHP_EOL;
             }
 
         }
@@ -163,6 +163,8 @@
             $migrations = $query->executeQuery()->fetchAllAssociativeIndexed();
             $migrating = false;
 
+            sort($migrationSteps);
+
             /** @var MigrationStep $migrationStep */
             foreach ($migrationSteps as $migrationStep)
             {
@@ -174,6 +176,8 @@
                     }
                     continue;
                 }
+
+                var_dump($migrationStep::class);
 
                 $migrationStep->up($this->conn);
                 $migrating = true;

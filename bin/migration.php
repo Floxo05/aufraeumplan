@@ -52,15 +52,11 @@
                     break;
             }
         }
-    } catch (SchemaException|MissingEnvironmentInformation|\Doctrine\DBAL\Exception $e)
+    } catch (SchemaException|MissingEnvironmentInformation|\Doctrine\DBAL\Exception|Exception $e)
     {
-        echo "Folgender Fehler ist während der Migrierung aufgetreten: " . $e->getMessage();
+        echo "Folgender Fehler ist während der Migrierung aufgetreten: " . $e->getMessage() . PHP_EOL;
     } finally
     {
         $conn->close();
     }
-
-
-    $conn->close();
-
 

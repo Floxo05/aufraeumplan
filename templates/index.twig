@@ -21,8 +21,25 @@
         {% block content %}
             <section>
                 {% block table %}
-                    <div class="table">
-
+                    <div class="table_div">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Person</th>
+                                    <th>Raum</th>
+                                    <th>Aufgabe</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for aufgabe in aufgaben %}
+                                <tr id="{{ aufgabe.aktivitaet_id }}">
+                                    <td>{{ aufgabe.name }}</td>
+                                    <td>{{ aufgabe.raum }}</td>
+                                    <td>{{ aufgabe.aktivitaet }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 {% endblock %}
 
@@ -39,6 +56,13 @@
                     </div>
                 {% endblock %}
             </section>
+        {% endblock %}
+        {% block footer %}
+            <footer>
+                <button>
+                    Daten verwalten
+                </button>
+            </footer>
         {% endblock %}
     </main>
 {% endblock %}
