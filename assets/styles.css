@@ -111,10 +111,12 @@ footer button:active {
 
 th {
     padding: 30px 0;
+    text-decoration: underline;
 }
 
 td {
     padding: 20px 0;
+    font-size: 90%;
 }
 
 th, td {
