@@ -126,3 +126,14 @@ th, td {
 .selected {
     background-color: #005d69
 }
+
+.time_change {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6%;
+    align-items: center;
+}
+
+.time_change img {
+    height: 50px;
+}

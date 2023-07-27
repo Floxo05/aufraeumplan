@@ -22,6 +22,14 @@
             <section>
                 {% block table %}
                     <div class="table_div">
+                        {% block time_change %}
+                            <div class="time_change">
+                                <img src="./assets/icons/left-arrow.svg" alt="left arrow" id="left-arrow">
+                                <span id="time-span">27.07.2023</span>
+                                <img src="./assets/icons/right-arrow.svg" alt="right-arrow" id="right-arrow">
+                            </div>
+                        {% endblock %}
+
                         <table class="table" id="table">
                             <thead>
                                 <tr>
@@ -31,7 +39,7 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="data-table">
                             {% for aufgabe in aufgaben %}
                                 <tr id="{{ aufgabe.aktivitaeten_id }}">
                                     <td>{{ aufgabe.name }}</td>

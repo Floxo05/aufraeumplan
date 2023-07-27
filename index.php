@@ -28,7 +28,10 @@ use Twig\Error\LoaderError;
 
     $abfallkalender = new Abfallkalender($conn);
 
+    date_default_timezone_set('Europe/Berlin');
+
     $heutigeAufgaben = $abfallkalender->getAufgaben(date('Y-m-d'));
+//    var_dump(date('Y-m-d'));
 
     try
     {
