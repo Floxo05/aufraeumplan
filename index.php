@@ -3,7 +3,8 @@
     use Doctrine\DBAL\DriverManager;
     use Dotenv\Dotenv;
     use Florian\Abfallkalender\Models\Abfallkalender;
-    use Twig\Error\LoaderError;
+use Florian\Abfallkalender\Models\Database\Database;
+use Twig\Error\LoaderError;
     use Twig\Error\RuntimeError;
     use Twig\Error\SyntaxError;
 
@@ -12,17 +13,9 @@
     $dotenv = Dotenv::createImmutable(__DIR__);
     $dotenv->load();
 
-    $connectionParams = [
-        'dbname' => $_ENV['DB_NAME'] ?? '',
-        'user' => $_ENV['DB_USERNAME'] ?? '',
-        'password' => $_ENV['DB_PASSWORD'] ?? '',
-        'host' => $_ENV['DB_HOST'] ?? '',
-        'driver' => 'pdo_mysql',
-    ];
-
     try
     {
-        $conn = DriverManager::getConnection($connectionParams);
+        $conn = Database::getConnection();
     } catch (\Doctrine\DBAL\Exception $e)
     {
         echo $e->getMessage();

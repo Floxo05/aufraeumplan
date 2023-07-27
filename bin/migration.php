@@ -6,28 +6,18 @@
     use Doctrine\DBAL\Schema\SchemaException;
     use Dotenv\Dotenv;
     use Florian\Abfallkalender\Exceptions\MissingEnvironmentInformation;
-    use Florian\Abfallkalender\Models\Migration\Migration;
+use Florian\Abfallkalender\Models\Database\Database;
+use Florian\Abfallkalender\Models\Migration\Migration;
 
     require_once __DIR__ . '/../vendor/autoload.php';
 
     $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
     $dotenv->load();
 
-    $connectionParams = [
-        'dbname' => $_ENV['DB_NAME'] ?? '',
-        'user' => $_ENV['DB_USERNAME'] ?? '',
-        'password' => $_ENV['DB_PASSWORD'] ?? '',
-        'host' => $_ENV['DB_HOST'] ?? '',
-        'driver' => 'pdo_mysql',
-    ];
-
-    //    var_dump($connectionParams);
 
     try
     {
-        $conn = DriverManager::getConnection($connectionParams);
-
-        $conn->connect();
+        $conn = Database::getConnection();
     } catch (\Doctrine\DBAL\Exception $e)
     {
         echo $e->getMessage();

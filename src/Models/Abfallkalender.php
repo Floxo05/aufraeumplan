@@ -30,6 +30,8 @@
                 unset($aufgaben[$i]['user_id']);
                 unset($aufgaben[$i]['intervall']);
                 unset($aufgaben[$i]['startdatum']);
+                $aufgaben[$i]['icon'] = $this->getIcon((int) $aufgaben[$i]['ist_erledigt']);
+                unset($aufgaben[$i]['ist_erledigt']);
             }
 
             return $aufgaben;
@@ -53,7 +55,11 @@
             $this->aktivitaeten = $query->executeQuery()->fetchAllAssociative();
         }
 
-        private function calcAufgabenFuerTag(string $date) {
+        /**
+         * @throws Exception
+         */
+        private function calcAufgabenFuerTag(string $date): array
+        {
 
             $aufgaben = [];
 
@@ -67,10 +73,68 @@
 
                 if ($diff->d % (int) $aktivitaet['intervall'] === 0)
                 {
+                    $query = $this->conn->createQueryBuilder();
+
+                    $where = $query->expr()->and(
+                        $query->expr()->eq($aktivitaet['aktivitaeten_id'], 'aktivitaeten_id'),
+                        $query->expr()->eq('?', 'datum')
+                    );
+
+                    $query->select('ist_erledigt')
+                        ->from('aktivitaeten_log')
+                        ->where($where)
+                        ->setParameter(1, $date);
+
+                    $result = $query->fetchOne();
+                    if (is_bool($result))
+                    {
+                        $result = 2;
+                    }
+
+                    $aktivitaet['ist_erledigt'] = $result;
                     $aufgaben[] = $aktivitaet;
                 }
             }
 
             return $aufgaben;
+        }
+
+        /**
+         * @throws Exception
+         */
+        public function updateAktivitaeten(array $requestData): void
+        {
+            $selectedIds = $requestData['selectedIDs'];
+            foreach ($selectedIds as $id)
+            {
+                $sql = <<<SQL
+                INSERT INTO aktivitaeten_log
+                SET
+                    aktivitaeten_id = :aktivitaeten_id,
+                    datum = :datum,
+                    ist_erledigt = :ist_erledigt,
+                    updated = NOW()
+                ON DUPLICATE KEY UPDATE 
+                    ist_erledigt = :ist_erledigt,
+                    updated = NOW()                                       
+SQL;
+
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindValue('aktivitaeten_id', $id);
+                $stmt->bindValue('datum', $requestData['date']);
+                $stmt->bindValue('ist_erledigt', $requestData['isDone'] ? 1 : 0);
+
+                $stmt->executeQuery();
+            }
+        }
+
+        private function getIcon(int $ist_erledigt): string
+        {
+            return match ($ist_erledigt)
+            {
+                0 => 'cross',
+                1 => 'tick',
+                default => 'clock'
+            };
         }
     }
