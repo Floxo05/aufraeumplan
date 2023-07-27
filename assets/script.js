@@ -81,8 +81,6 @@ function formatDateReadable(inputString) {
     return `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year}`;
 }
 
-document.getElementById("currentDate").value = formatDate(new Date());
-
 
 async function setIcon(isDone) {
     if (isDone) {
@@ -109,6 +107,9 @@ const setTime = (time) => {
     document.getElementById('currentDate').value = time;
 
 }
+
+setTime(formatDate(new Date()));
+
 const changeTime = (offset) => {
 
     const currentDate = new Date(document.getElementById('currentDate').value);
