@@ -34,11 +34,11 @@ document.getElementById("btn_not_done").addEventListener("click", () => sendData
 
 async function sendDataToServer(isDone) {
 
-    await setIcon(isDone);
-
     const selectedRows = document.querySelectorAll("#table tr[data-selected='true']");
     const selectedIDs = Array.from(selectedRows).map((row) => row.id);
     const currentDate = document.getElementById("currentDate").value;
+
+    await setIcon(isDone, selectedIDs);
 
     // Hier fügen wir den Boolean-Wert (isDone) dem zu sendenden Datenobjekt hinzu
     const requestData = {
@@ -82,12 +82,15 @@ function formatDateReadable(inputString) {
 }
 
 
-async function setIcon(isDone) {
-    if (isDone) {
-        document.getElementById('icon').setAttribute('src', './assets/icons/tick.svg');
-    } else {
-        document.getElementById('icon').setAttribute('src', './assets/icons/cross.svg');
-    }
+async function setIcon(isDone, selectedIDs) {
+
+    selectedIDs.forEach((ids) => {
+        if (isDone) {
+            document.getElementById(`icon${ids}`).setAttribute('src', './assets/icons/tick.svg');
+        } else {
+            document.getElementById(`icon${ids}`).setAttribute('src', './assets/icons/cross.svg');
+        }
+    })
 }
 
 document.getElementById('left-arrow').addEventListener('click', () => {
@@ -171,6 +174,7 @@ function updateTable(data) {
         const iconCell = document.createElement('td');
         const iconImg = document.createElement('img');
         iconImg.src = `./assets/icons/${entry.icon}.svg`;
+        iconImg.id = `icon${entry.aktivitaeten_id}`;
         iconCell.appendChild(iconImg);
         row.appendChild(iconCell);
 

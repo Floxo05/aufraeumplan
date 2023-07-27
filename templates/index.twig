@@ -45,7 +45,7 @@
                                     <td>{{ aufgabe.name }}</td>
                                     <td>{{ aufgabe.raum }}</td>
                                     <td>{{ aufgabe.aktivitaet }}</td>
-                                    <td><img src="./assets/icons/{{ aufgabe.icon }}.svg" alt="clock" id="icon"></td>
+                                    <td><img src="./assets/icons/{{ aufgabe.icon }}.svg" alt="clock" id="icon{{ aufgabe.aktivitaeten_id }}"></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
