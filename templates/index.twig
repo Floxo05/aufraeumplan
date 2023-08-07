@@ -41,7 +41,7 @@
                             </thead>
                             <tbody id="data-table">
                             {% for aufgabe in aufgaben %}
-                                <tr id="{{ aufgabe.aktivitaeten_id }}">
+                                <tr id="{{ aufgabe.aktivitaeten_id }}" data-udate="{{ aufgabe.ursprungs_datum }}">
                                     <td>{{ aufgabe.name }}</td>
                                     <td>{{ aufgabe.raum }}</td>
                                     <td>{{ aufgabe.aktivitaet }}</td>

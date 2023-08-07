@@ -12,7 +12,7 @@ $dotenv->load();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $requestData = json_decode(file_get_contents("php://input"), true);
 
-    if (isset($requestData["selectedIDs"]) && isset($requestData["isDone"])) {
+    if (isset($requestData["selectedIDs"]) && isset($requestData["isDone"]) && isset($requestData['dates'])) {
 
         try {
             $conn = Database::getConnection();

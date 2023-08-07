@@ -36,7 +36,7 @@ async function sendDataToServer(isDone) {
 
     const selectedRows = document.querySelectorAll("#table tr[data-selected='true']");
     const selectedIDs = Array.from(selectedRows).map((row) => row.id);
-    const currentDate = document.getElementById("currentDate").value;
+    const selectedDates = Array.from(selectedRows).map((row) => row.getAttribute('data-udate'));
 
     await setIcon(isDone, selectedIDs);
 
@@ -44,7 +44,7 @@ async function sendDataToServer(isDone) {
     const requestData = {
         selectedIDs: selectedIDs,
         isDone: isDone,
-        date: currentDate
+        dates: selectedDates
     };
 
     // AJAX-POST-Request
@@ -157,6 +157,7 @@ function updateTable(data) {
     data.forEach((entry) => {
         const row = document.createElement('tr');
         row.id = entry.aktivitaeten_id;
+        row.setAttribute('data-udate', entry.ursprungs_datum);
 
         // Erstelle Zellen und füge die Daten hinzu
         const nameCell = document.createElement('td');

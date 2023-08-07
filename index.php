@@ -3,8 +3,8 @@
     use Doctrine\DBAL\DriverManager;
     use Dotenv\Dotenv;
     use Florian\Abfallkalender\Models\Abfallkalender;
-use Florian\Abfallkalender\Models\Database\Database;
-use Twig\Error\LoaderError;
+    use Florian\Abfallkalender\Models\Database\Database;
+    use Twig\Error\LoaderError;
     use Twig\Error\RuntimeError;
     use Twig\Error\SyntaxError;
 
@@ -30,7 +30,8 @@ use Twig\Error\LoaderError;
 
     date_default_timezone_set('Europe/Berlin');
 
-    $heutigeAufgaben = $abfallkalender->getAufgaben(date('Y-m-d'));
+    $heutigeAufgaben = $abfallkalender->getAufgaben(date(Abfallkalender::DATE_FORMAT));
+
 //    var_dump(date('Y-m-d'));
 
     try

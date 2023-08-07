@@ -9,6 +9,8 @@
 
     class Abfallkalender
     {
+
+        const DATE_FORMAT = 'Y-m-d';
         protected array $aktivitaeten = [];
         protected Connection $conn;
 
@@ -20,9 +22,15 @@
         }
 
 
+        /**
+         * @throws Exception
+         */
         public function getAufgaben(string $date): array
         {
-            $aufgaben = $this->calcAufgabenFuerTag($date);
+            $aufgaben = array_merge(
+                $this->calcAufgabenFuerTag($date),
+                $this->calcOffeneAufgaben($date)
+            );
 
             for ($i = 0; $i < count($aufgaben); $i++)
             {
@@ -31,6 +39,10 @@
                 unset($aufgaben[$i]['intervall']);
                 unset($aufgaben[$i]['startdatum']);
                 $aufgaben[$i]['icon'] = $this->getIcon((int) $aufgaben[$i]['ist_erledigt']);
+                if (!isset($aufgaben[$i]['ursprungs_datum']))
+                {
+                    $aufgaben[$i]['ursprungs_datum'] = $date;
+                }
                 unset($aufgaben[$i]['ist_erledigt']);
             }
 
@@ -63,11 +75,11 @@
 
             $aufgaben = [];
 
-            $dateObject = DateTime::createFromFormat('Y-m-d', $date);
+            $dateObject = DateTime::createFromFormat(self::DATE_FORMAT, $date);
 
             foreach ($this->aktivitaeten as $aktivitaet)
             {
-                $dateAktivitaet = DateTime::createFromFormat('Y-m-d', $aktivitaet['startdatum']);
+                $dateAktivitaet = DateTime::createFromFormat(self::DATE_FORMAT, $aktivitaet['startdatum']);
 
                 $diff = $dateObject->diff($dateAktivitaet);
 
@@ -86,6 +98,8 @@
                         ->setParameter(1, $date);
 
                     $result = $query->fetchOne();
+
+                    // Wenn $result ein bool ist, dann wurde kein Eintrag gefunden -> es wurde noch nicht bearbeitet
                     if (is_bool($result))
                     {
                         $result = 2;
@@ -105,7 +119,7 @@
         public function updateAktivitaeten(array $requestData): void
         {
             $selectedIds = $requestData['selectedIDs'];
-            foreach ($selectedIds as $id)
+            for ($i = 0; $i < count($selectedIds); $i++)
             {
                 $sql = <<<SQL
                 INSERT INTO aktivitaeten_log
@@ -120,14 +134,20 @@
 SQL;
 
                 $stmt = $this->conn->prepare($sql);
-                $stmt->bindValue('aktivitaeten_id', $id);
-                $stmt->bindValue('datum', $requestData['date']);
+                $stmt->bindValue('aktivitaeten_id', $selectedIds[$i]);
+                $stmt->bindValue('datum', $requestData['dates'][$i]);
                 $stmt->bindValue('ist_erledigt', $requestData['isDone'] ? 1 : 0);
 
                 $stmt->executeQuery();
             }
         }
 
+        /**
+         * Funktion gibt den entsprechenden Iconname anhand des übergebenen Wertes zurück
+         *
+         * @param int $ist_erledigt
+         * @return string
+         */
         private function getIcon(int $ist_erledigt): string
         {
             return match ($ist_erledigt)
@@ -137,4 +157,34 @@ SQL;
                 default => 'clock'
             };
         }
+
+        /**
+         * @throws Exception
+         */
+        public function calcOffeneAufgaben(string $date) : array
+        {
+            $out = [];
+
+            $datetime = DateTime::createFromFormat(self::DATE_FORMAT, $date);
+
+            for ($i = 0; $i < 14; $i++)
+            {
+                $datetime->modify("-1 day");
+
+                $dateStr = $datetime->format(self::DATE_FORMAT);
+                foreach ($this->calcAufgabenFuerTag($dateStr) as $aktivitaeten)
+                {
+                    if ($aktivitaeten['ist_erledigt'] === 2)
+                    {
+                        $aktivitaeten['ursprungs_datum'] = $dateStr;
+                        $out[] = $aktivitaeten;
+                    }
+                }
+
+            }
+
+            return $out;
+        }
+
+
     }
