@@ -83,7 +83,7 @@
 
                 $diff = $dateObject->diff($dateAktivitaet);
 
-                if ($diff->d % (int) $aktivitaet['intervall'] === 0)
+                if ($diff->days % (int) $aktivitaet['intervall'] === 0)
                 {
                     $query = $this->conn->createQueryBuilder();
 
